@@ -40,9 +40,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'phone' => [
+        'admin' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'admins',
         ],
     ],
 
@@ -67,13 +67,14 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
-            'table' => 'users'
+            'table' => 'users',
+            //'field' => 'phone'
         ],
-        'phone' => [
+        'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
             'table' => 'users',
-            'field' => 'phone'
+            //'field' => 'phone'
         ],
         // 'users' => [
         //     'driver' => 'database',

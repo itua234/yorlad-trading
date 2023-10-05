@@ -66,7 +66,6 @@ class AuthController extends Controller
             ]);
         endif;
 
-
         return Response::json([
             'status'    => 'success',
             'message'   => 'Registration successful',
@@ -104,7 +103,12 @@ class AuthController extends Controller
             ], 400);
         endif;
 
-        //Authentication successful
+        $url;
+        if($user->usertype == "admin"):
+            $url = url("/dashboard");
+        else:
+            $url = url("/");
+        endif;
         Auth::login($user, true);
         $user = Auth::user();
         $token = $user->createToken("web-session")->plainTextToken;
@@ -114,9 +118,8 @@ class AuthController extends Controller
             'status' => 'success',
             "message" => "Login successful",
             'results' => $user,
-            "redirect" => url("/")
+            "redirect" => $url
         ], 200);
-
     }
 
     public function logout(Request $request)
@@ -239,7 +242,7 @@ class AuthController extends Controller
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://login.betasms.com.ng/api/',
+            CURLOPT_URL => 'https://login.betasms.com.ng/api/',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -250,7 +253,7 @@ class AuthController extends Controller
             CURLOPT_POSTFIELDS => array(
                 'username' => "demo@opas.pro",
                 'password' => "12345",
-                'sender' => "Yorlad",
+                'sender' => "Vado Global Trading",
                 'mobiles' => $phone,
                 'message' => "Your verification number is: ".$code
             ),

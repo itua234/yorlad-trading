@@ -8,17 +8,19 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Transaction;
 
 class OrderPlaced extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $transaction;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Transaction $transaction)
     {
-        //
+        $this->transaction = $transaction;
     }
 
     /**
@@ -27,7 +29,7 @@ class OrderPlaced extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Placed',
+            subject: 'New Order Placed',
         );
     }
 
@@ -37,7 +39,7 @@ class OrderPlaced extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.orders.placed',
+            markdown: 'emails.order-placed',
         );
     }
 

@@ -1,25 +1,21 @@
 @include("admin.layouts.header")
-      <div class="container-fluid" style="background-color:#F5F6FA">
-         <!--  Row 1 -->
-         
-         <div class="row">
-            <div class="col">
-               <div class="d-flex justify-content-between">
-                  <h5 class="card-title mb-9 fw-semibold">Users</h5>
-               </div>
-               <!-- Start Of Data Table -->
-               <div class="table-responsive">
-			   		<table class="users-table data-table table table-bordered table-responsive bg-white nowrap">
+        <div class="container-fluid" style="background-color:#F5F6FA">
+            <!--  Row 1 -->
+            <div class="row">
+                <div class="col">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title mb-9 fw-semibold">Users</h5>
+                </div>
+                <!-- Start Of Data Table -->
+                <div class="table-responsive">
+                    <table class="users-table data-table table table-bordered table-responsive bg-white nowrap">
                         <thead>
                             <tr>
-                                <th scope="col">Sn.</th>
-                                <th scope="col">Firstname</th>
-                                <th scope="col">Lastname</th>
-                                <th scope="col">Phone</th>
+                                <th scope="col">User</th>
                                 <th scope="col">Balance</th>
                                 <th scope="col">Referral</th>
                                 <th scope="col">Total Income</th>
-								<th scope="col">Referral Income</th>
+                                <th scope="col">Referral Income</th>
                                 <th scope="col">Total Withdrawal</th>
                             </tr>
                         </thead>
@@ -27,25 +23,20 @@
                             
                         </tbody>
                     </table>
-               </div>
-               <!-- End Of Data Table -->
-               
+                </div>
+                <!-- End Of Data Table -->
+                </div>
             </div>
-         </div>
-
-
-         <div class="py-6 px-6 text-center">
-            <p class="mb-0 fs-4">Design and Developed by <a href="https://adminmart.com/" target="_blank" class="pe-1 text-primary text-decoration-underline">AdminMart.com</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a></p>
-         </div>
-      </div>
-   </div>
+            <!--  End of Row 1 -->
+        </div>
+    </div>
 </div>
-<script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
-<script src="{{asset('assets/libs/axios/axios.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('admin/assets/libs/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{asset('admin/assets/libs/axios/axios.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/responsive.bootstrap4.min.js')}}"></script>
 <script>
 	$('.users-table').DataTable({
         ajax: {
@@ -53,10 +44,12 @@
             dataSrc: 'results'
         },
         columns: [
-            { data: "id"},
-			{ data: "firstname"},
-			{ data: "lastname"},
-            { data: "phone"},
+            { 
+                data: null,
+                render: function(data, type, row){
+                    return '<div><div>'+data["firstname"]+'</div><div>'+data["lastname"]+'</div><div>'+data["phone"]+'</div></div>'
+                }
+            },
             { data: "balance"},
             { data: "referral"},
             { data: "total_income"},
@@ -74,7 +67,9 @@
 				next: '<i class="ion-chevron-right"></i>',
 				previous: '<i class="ion-chevron-left"></i>'  
 			}
-		}
+		},
+        "pageLength": 100,
+        "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
 	});
 </script>
 @include("admin.layouts.footer")

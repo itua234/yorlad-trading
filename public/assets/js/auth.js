@@ -160,7 +160,7 @@ $(function () {
         
             switch(error.response.status){
                 case 400:
-                    document.getElementsByClassName('error')[2].innerHTML = error.response.data.message;
+                    document.getElementsByClassName('error')[1].innerHTML = error.response.data.message;
                 break;
             }
             btn.text("Sign in");

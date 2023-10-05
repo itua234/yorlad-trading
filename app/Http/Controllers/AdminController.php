@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Validator, Response, Hash};
-use App\Models\{User, Otp, Product, Category, Transaction, Account, Currency, Withdrawal};
+use App\Models\{User, Otp, Product, Category, ReferralUser,
+    Transaction, Account, Currency, Withdrawal};
 use App\Rules\{
     ContainsNumber,
     HasSpecialCharacter,
@@ -15,54 +16,9 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            "password" => "required",
-            "email" => "required"
-        ]);
-
-        if($validator->fails())
-        {
-            return response([
-                'message' => "Login failed",
-                'error' => $validator->getMessageBag()->toArray()
-            ], 422);
-        }
-
-        $user = User::where(['email' => $request["email"]])->first();
-        if(!$user || !Hash::check($request["password"], $user->password)):
-            return Response::json([
-                'status' => 'fail',
-                'message' => 'Invalid credentials',
-                'error' => true
-            ], 400);
-        elseif($user->user_type !== "admin"):
-            return Response::json([
-                'status' => 'fail',
-                'message' => 'You are not an admin',
-                'error' => true
-            ], 400);
-        endif;
-
-        //Authentication successful
-        Auth::login($user, true);
-        $user = Auth::user();
-        $token = $user->createToken("web-session")->plainTextToken;
-        $user->token = $token;
-        
-        return Response::json([
-            'status' => 'success',
-            "message" => "Login successful",
-            'results' => $user,
-            "redirect" => url("/")
-        ], 200);
-
-    }
-
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard("admin")->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect("/login");
@@ -88,46 +44,26 @@ class AdminController extends Controller
         return view('admin.withdrawals');
     }
 
-    public function showLoginForm()
-    {
-        return view('admin.login');
-    }
-
     public function createProduct(Request $request)
     {
         $product = new Product();
         $product->uuid = Str::uuid();
         $product->price = $request["price"];
         $product->category_id = (int) $request["category_id"];
-        $product->new_price = (empty($request["new_price"]) ? NULL : $request["new_price"]);
+        $product->old_price = (empty($request["old_price"]) ? NULL : $request["old_price"]);
         $product->name = $request["name"];
         $product->returns = (int) $request["returns"];
         $product->daily_income = (int) $request["daily_income"];
         $product->validity = $request["validity"];
         $product->expired_at = (empty($request["expired_at"]) ? NULL : $request["expired_at"]);
         $product->currency_id = 1;
+        $product->photo = "product".mt_rand(1,10)."jpeg";
         $product->save();
 
         return Response::json([
             'status' => 'success',
             'message' => 'Registration successful',
             'results' => $product
-        ], 200);
-    }
-
-    public function verifyTransaction(Request $request)
-    {
-        $transaction = Transaction::find($request["transactionId"]);
-        if($transaction->verified) exit();
-
-        $transaction->status = $request["status"];
-        $transaction->verified = 1;
-        $transaction->save();
-
-        return Response::json([
-            'status' => 'success',
-            'message' => 'transaction has been verified successfully',
-            'results' => $transaction
         ], 200);
     }
 
@@ -186,16 +122,20 @@ class AdminController extends Controller
     public function fetchAllUsers()
     {
         $users = User::all();
+        $currency = Currency::first();
 
         return Response::json([
             'status'    => 'success',
-            'results'     => $users
+            'results'   => $users
         ], 200);
     }
 
     public function fetchAllOrders()
     {
-        $transactions = Transaction::with(["user", "account", "product"])->get();
+        $transactions = Transaction::with([
+            "user", "account", "product"
+        ])->where("status", "!=", "success")
+        ->orderBy("created_at", "desc")->get();
         $currency = Currency::first();
 
         return Response::json([
@@ -219,5 +159,45 @@ class AdminController extends Controller
         ], 200);
     }
 
+    public function confirmOrder($id)
+    {
+        $transaction = Transaction::with("user")->where(["id" => $id])->first();
+        $checkIfNew = Transaction::where([
+            "user_id" => $transaction->user->id,
+            "status" => "success"
+        ])->first();
 
+        if(is_null($checkIfNew)):
+            $referer = ReferralUser::where("referee_id", 6)->first();
+            $user = User::find($referer->user_id);
+            $user->balance += env("REFERRAL_BONUS");
+            //$user->total_income += env("REFERRAL_BONUS");
+            $user->referral_income += env("REFERRAL_BONUS");
+            $user->save();
+        endif;
+
+        $transaction->status = "success";
+        $transaction->verified = 1;
+        $transaction->save();
+
+        return Response::json([
+            'status' => 'success',
+            "message" => "order has been confirmed",
+            //'results' => $referer
+        ], 200);
+    }
+
+    public function confirmWithdrawal($id)
+    {
+        $withdrawal = Withdrawal::find($id);
+
+        $withdrawal->status = "success";
+        $withdrawal->save();
+
+        return Response::json([
+            'status' => 'success',
+            "message" => "withdrawal has been confirmed",
+            'results' => $withdrawal
+        ], 200);
+    }
 }

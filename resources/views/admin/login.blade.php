@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Modernize Free</title>
-  <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/logos/favicon.png')}}" />
-  <link rel="stylesheet" href="{{asset('assets/css/admin.styles.min.css')}}" />
-  <link rel="stylesheet" href="{{asset('assets/css/admin.min.css')}}" />
+  <link rel="shortcut icon" type="image/png" href="{{asset('admin/assets/images/logos/favicon.png')}}" />
+  <link rel="stylesheet" href="{{asset('admin/assets/css/admin.styles.min.css')}}" />
+  <link rel="stylesheet" href="{{asset('admin/assets/css/admin.min.css')}}" />
 </head>
 
 <body>
@@ -26,7 +26,8 @@
                 </a>
                 <p class="text-center">Your Social Campaigns</p>
                 <span class="message d-block" style="text-align:center"></span>
-                <form action="/login" method="POST" id="login-form">
+                <form action="{{url('/login')}}" method="POST" id="login-form">
+                  @csrf
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email">
@@ -47,10 +48,10 @@
                     <a class="text-primary fw-bold" href="./index.html">Forgot Password ?</a>
                   </div>
                   <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
-                  <div class="d-flex align-items-center justify-content-center">
+                  <!--<div class="d-flex align-items-center justify-content-center">
                     <p class="fs-4 mb-0 fw-bold">New to Modernize?</p>
                     <a class="text-primary fw-bold ms-2" href="./authentication-register.html">Create an account</a>
-                  </div>
+                  </div>-->
                 </form>
               </div>
             </div>
@@ -59,9 +60,9 @@
       </div>
     </div>
   </div>
-  <script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
-  <script src="{{asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-  <script src="{{asset('assets/libs/axios/axios.js')}}"></script>
+  <script src="{{asset('admin/assets/libs/jquery/dist/jquery.min.js')}}"></script>
+  <script src="{{asset('admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{asset('admin/assets/libs/axios/axios.js')}}"></script>
   <script>
     $(function () {
       $('#login-form').on("submit", function (event) {
@@ -72,20 +73,23 @@
           email: $("#email").val(),
           password: $("#password").val()
         };
+        let token = $("input[name='_token']").val();
+
         $('.error').text('');
         $('.message').text('');
         const config = {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            //Authorization: `Bearer ${apiKey}`
+            "X-CSRF-TOKEN": token,
+            "X-Requested-With": "XMLHttpRequest"
           }
         };
         axios.post(url, inputs, config)
         .then(function(response){
           let message = response.data.message;
           $(".message").text(message);
-          window.location.href = "/dashboard";
+          window.location.href = response.data.redirect;
         })
         .catch(function(error){
           let errors = error.response.data.error;

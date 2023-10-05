@@ -19,9 +19,9 @@ use App\Http\Controllers\{
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
 
 Route::get('/', function () {
     return [
@@ -30,14 +30,19 @@ Route::get('/', function () {
     ];
 });
 
+Route::get('/order-data', [UserController::class, 'getTransactionData']);
+Route::get('/spark', [UserController::class, 'spark']);
+Route::get('/payout-webhook', [UserController::class, 'payoutWebhook']);
+
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/send-otp', [AuthController::class, 'sendOtp']);
+Route::post('/send-reset-otp', [AuthController::class, 'sendResetOtp']);
+
+Route::post('/product/create', [UserController::class, 'createProduct']);
+
 Route::get('/users', [AdminController::class, 'fetchAllUsers']);
 Route::get('/products', [AdminController::class, 'fetchAllProducts']);
 Route::get('/orders', [AdminController::class, 'fetchAllOrders']);
 Route::get('/withdrawals', [AdminController::class, 'fetchAllWithdrawals']);
 
-Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-Route::post('/send-otp', [AuthController::class, 'sendOtp']);
-Route::post('/send-reset-otp', [AuthController::class, 'sendResetOtp']);
-//Route::get('/plans', [UserController::class, 'getPlans']);
-//Route::get('/plans/{planId}', [UserController::class, 'getPlanData']);
-//Route::get('/withdrawals', [UserController::class, 'getWithdrawals']);
+//Route::get('/order/confirm/{id}', [AdminController::class, 'confirmOrder']);

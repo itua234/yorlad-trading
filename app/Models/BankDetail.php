@@ -15,7 +15,8 @@ class BankDetail extends Model
         'user_id',
         'account_name',
         'account_number',
-        'bank_name'
+        'bank_name',
+        'bank_code'
     ];
 
     protected $hidden = [

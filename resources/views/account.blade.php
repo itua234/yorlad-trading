@@ -1,15 +1,13 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <!-- Basic Page Info -->
         <meta charset="utf-8">
-        <title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	    <meta name="viewport" content="">
+        <meta name="theme-color" content="#3e4684">
+        <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.png')}}"/>
+        <title>Vado Global - Digital Investment Platform</title>
         <?php date_default_timezone_set("Africa/Lagos"); ?>
-
-        <!-- Site favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="{{asset('vendors/images/apple-touch-icon.png')}}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{asset('vendors/images/favicon-32x32.png')}}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{asset('vendors/images/favicon-16x16.png')}}">
 
         <!-- Mobile Specific Metas -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -40,15 +38,15 @@
         <div class="row justify-content-center">
             <div class="col-lg-7 col-xl-6 col-md-8 col-sm-11 pos-relative">
                 <div class="top-nav d-flex justify-content-end">
-                    <div class="mr-auto d-flex">
+                    <a href="{{url('/account')}}" class="mr-auto d-flex">
                         <div class="h-100 d-flex align-items-center justify-content-center" style="width:40px;">
-                            <ion-icon name="wallet-outline" class="icons"></ion-icon>
+                            <ion-icon name="wallet" class="icons"></ion-icon>
                         </div>
-                        <div class="h-100 d-flex align-items-center justify-content-center">
+                        <div style="color:#3e4684;" class="h-100 d-flex align-items-center justify-content-center">
                             <span class="">{{$currency->type}}</span>
                             <span id="balance">{{number_format($user->balance)}}</span>
                         </div>
-                    </div>
+                    </a>
                     <a href="{{url('/orders/active')}}">
                         <div class="position-relative h-100 d-flex align-items-center justify-content-center" style="width:40px;">
                             <ion-icon name="calendar" class="icons"></ion-icon>
@@ -59,7 +57,7 @@
                     </a>
                     <a href="{{url('/withdrawals')}}">
                         <div class="position-relative h-100 d-flex align-items-center justify-content-center" style="width:40px;">
-                            <ion-icon name="cash-outline" class="icons"></ion-icon>
+                            <ion-icon name="cash" class="icons"></ion-icon>
                         </div>
                     </a>
                 </div>
@@ -87,7 +85,7 @@
                                     data-bs-toggle="collapse" 
                                     data-bs-target="#flush-collapseTwo" 
                                     aria-expanded="false" aria-controls="flush-collapseTwo">
-                                        <span>Account Details</span>
+                                        <span>Bank Details</span>
                                     </h5>
                                     <div id="flush-collapseTwo" class="accordion-collapse collapse" 
                                     aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
@@ -95,13 +93,23 @@
                                             <form id="add-bank-data" action="{{url('/bank-details')}}" method="POST">
                                                 @csrf
                                                 <div class="">
-                                                    <label for="">Account Name</label>
-                                                    <input type="text" class="form-control" name="account_name" 
-                                                    value="<?php
-                                                        if(isset($user->bank)){
-                                                            echo $user->bank->account_name;
-                                                        };
-                                                    ?>">
+                                                    <label for="">Bank Name</label>
+                                                    <select class="form-control" name="bank_name">
+                                                        <?php 
+                                                            foreach($banks as $bank):
+                                                                if(isset($user->bank)):
+                                                                    if($bank["code"] == $user->bank->bank_code):
+                                                                        echo '<option value="'.$bank["code"].'" selected>
+                                                                            '.$bank["name"].'
+                                                                        </option>';
+                                                                    endif;
+                                                                endif;
+                                                                echo '<option value="'.$bank["code"].'">
+                                                                    '.$bank["name"].'
+                                                                </option>';
+                                                            endforeach;
+                                                        ?>
+                                                    </select>
                                                     <span class="error"></span>
                                                 </div>
                                                 <div class="mt-2">
@@ -111,21 +119,21 @@
                                                         if(isset($user->bank)){
                                                             echo $user->bank->account_number;
                                                         };
-                                                    ?>">
+                                                    ?>" data-url="{{url('/bank-details/verify')}}">
                                                     <span class="error"></span>
-                                                </div>                                       
-                                                <div class="">
-                                                    <label for="">Bank Name</label>
-                                                    <input type="text" class="form-control" name="bank_name"
+                                                </div>  
+                                                <div class="mt-2">
+                                                    <label for="">Account Name</label>
+                                                    <input type="text" class="form-control" name="account_name" 
                                                     value="<?php
                                                         if(isset($user->bank)){
-                                                            echo $user->bank->bank_name;
+                                                            echo $user->bank->account_name;
                                                         };
-                                                    ?>">
+                                                    ?>" readonly>
                                                     <span class="error"></span>
-                                                </div>
+                                                </div>                                     
                                                 <div class="w-100 mt-2">
-                                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                                    <button disabled type="submit" class="btn btn-primary w-100">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -153,6 +161,7 @@
                                                     <input type="number" class="form-control" name="pin">
                                                     <span class="error"></span>
                                                 </div>
+                                                <p style="font-size:10px;color:red;">withdrawal takes within 24 hours to be approved, and we also charge 6% withdrawal fee</p>
                                                 <div class="w-100 mt-2">
                                                     <button type="submit" class="btn btn-primary w-100">Submit</button>
                                                 </div>
@@ -169,14 +178,20 @@
                                     
                                     <div id="flush-collapseOne" class="accordion-collapse collapse" 
                                     aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                        <div class="accordion-body d-flex justify-content-between">
-                                            <div id="qrcode" class="w-100 d-flex justify-content-center pt-2 pb-2"></div>
-                                            <div class="position-relative">
-                                                <span style="cursor:pointer" id="copyReferral" 
-                                                    data-id="{{url('/register/'.$user->referral)}}">
-                                                    <img src="/assets/admin/images/icons/copy.svg">
-                                                </span>
-                                                <span id="copySuccessMessage">Copied to clipcoard!</span>
+                                        <div class="accordion-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div id="qrcode" class="w-100 d-flex justify-content-center pt-2 pb-2"></div>
+                                                <div class="position-relative">
+                                                    <span style="cursor:pointer" id="copyReferral" 
+                                                        data-id="{{url('/register/'.$user->referral)}}">
+                                                        <img src="/assets/admin/images/icons/copy.svg">
+                                                    </span>
+                                                    <span id="copySuccessMessage">Copied to clipcoard!</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-center">SCAN REFERRAL CODE</div>
+                                            <div class="mt-2 w-100">
+                                                <input type="text" class="w-100" disabled value="{{url('/register/'.$user->referral)}}">
                                             </div>
                                         </div>
                                     </div>
@@ -210,7 +225,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="accordion-item">
+                                <!--<div class="accordion-item">
                                     <h5 class="accordion-btn" 
                                     data-bs-toggle="collapse" 
                                     data-bs-target="#flush-collapseFive" 
@@ -223,7 +238,7 @@
                                             <a href="" class="btn btn-primary" download>Download Apk</a>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="accordion-item">
                                     <h5 class="accordion-btn" 
                                     data-bs-toggle="collapse" 
@@ -234,7 +249,17 @@
                                     <div id="flush-collapseSix" class="accordion-collapse collapse" 
                                     aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                                         <div class="accordion-body">
-                                            <a href="" class="btn btn-primary">Chat</a>
+                                            <div>
+                                                <a href="https://wa.me/+18058059883?text=Hello my name is ......" class="btn btn-primary">
+                                                    <span><ion-icon name="logo-whatsapp"></ion-icon></span>
+                                                    <span>+18058059883</span>
+                                                </a>
+                                            </div>
+                                            <div class="mt-2">
+                                                <a href="mailto:support@vadoglobal.com?subject=Vado Global Support" class="btn btn-primary">
+                                                    <span><ion-icon name="mail-outline"></ion-icon></span>
+                                                    <span>support@vadoglobal.com</span></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

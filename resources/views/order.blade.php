@@ -1,15 +1,12 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <!-- Basic Page Info -->
         <meta charset="utf-8">
-        <title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+        <title>Vado Global - Trading Platform</title>
+        <link rel="shortcut icon" type="image/png" href="{{asset('assets/images/favicon.png')}}"/>
         <?php date_default_timezone_set("Africa/Lagos"); ?>
 
-        <!-- Site favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="{{asset('vendors/images/apple-touch-icon.png')}}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{asset('vendors/images/favicon-32x32.png')}}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{asset('vendors/images/favicon-16x16.png')}}">
 
         <!-- Mobile Specific Metas -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -24,15 +21,15 @@
         <div class="row justify-content-center">
             <div class="col-lg-7 col-xl-6 col-md-8 col-sm-11 pos-relative">
                 <div class="top-nav d-flex justify-content-end">
-                    <div class="mr-auto d-flex">
+                    <a href="{{url('/account')}}" class="mr-auto d-flex">
                         <div class="h-100 d-flex align-items-center justify-content-center" style="width:40px;">
-                            <ion-icon name="wallet-outline" class="icons"></ion-icon>
+                            <ion-icon name="wallet" class="icons"></ion-icon>
                         </div>
-                        <div class="h-100 d-flex align-items-center justify-content-center">
+                        <div style="color:#3e4684;" class="h-100 d-flex align-items-center justify-content-center">
                             <span class="">{{$currency->type}}</span>
                             <span id="balance">{{number_format($user->balance)}}</span>
                         </div>
-                    </div>
+                    </a>
                     <a href="{{url('/orders/active')}}">
                         <div class="position-relative h-100 d-flex align-items-center justify-content-center" style="width:40px;">
                             <ion-icon name="calendar" class="icons"></ion-icon>
@@ -43,7 +40,7 @@
                     </a>
                     <a href="{{url('/withdrawals')}}">
                         <div class="position-relative h-100 d-flex align-items-center justify-content-center" style="width:40px;">
-                            <ion-icon name="cash-outline" class="icons"></ion-icon>
+                            <ion-icon name="cash" class="icons"></ion-icon>
                         </div>
                     </a>
                 </div>
@@ -69,11 +66,11 @@
                                                 <span>Status</span>
                                                 <span>
                                                     @if($transaction->status == "pending")
-                                                        <span class="badge bg-warning">{{$transaction->status}}</span>
-                                                    @elseif($transaction->status == "success")
-                                                        <span class="badge bg-success">{{$transaction->status}}</span>
-                                                    @else
                                                         <span class="badge bg-danger">{{$transaction->status}}</span>
+                                                    @elseif($transaction->status == "waiting")
+                                                        <span class="badge bg-warning">{{$transaction->status}}</span>
+                                                    @else
+                                                        <span class="badge bg-success">{{$transaction->status}}</span>
                                                     @endif
                                                 </span>
                                             </div>

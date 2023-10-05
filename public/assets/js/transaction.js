@@ -40,8 +40,8 @@ $(function () {
         .then(function(response){
             let message = response.data.message;
             $(".spin-loader-box").addClass("d-none");
-            Swal.fire(response.data.results);
-            //window.location.href = response.data.redirect;
+            //Swal.fire(response.data.results);
+            window.location.href = response.data.redirect;
         })
         .catch(function(error){
             $(".spin-loader-box").addClass("d-none");

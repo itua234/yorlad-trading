@@ -16,6 +16,48 @@ $(function () {
         }, 1000);
     }
 
+    $("input[name='account_number']").on("input", function (event) {
+        const target = $(this);
+        const account = target.val();
+        const url = $(this).data("url");
+        let btn = $("#add-bank-data button[type='submit']");
+
+        if(account.length == 10){
+            const inputs = {
+                account_number: account,
+                bank_name: $("select[name='bank_name']").val()
+            };
+            let token = $("input[name='_token']").val()
+    
+            $(".error").text("");
+            const config = {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": token,
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            };
+            axios.post(url, inputs, config)
+            .then(function(response){
+                let account = response.data.results;
+                $("input[name='account_name']").val(account.account_name);
+                btn.attr("disabled", false);
+            })
+            .catch(function(error){
+                let errors = error.response.data.error;
+                if(errors.account_number){
+                    document.getElementsByClassName('error')[1].innerHTML = errors.account_number;
+                }
+                if(errors.account_name){
+                    document.getElementsByClassName('error')[2].innerHTML = errors.account_name;
+                }
+                //$(".spin-loader-box").addClass("d-none");
+                btn.attr("disabled", true);
+            });
+        }
+    });
+
     $('#add-bank-data').on("submit", function (event) {
         event.preventDefault();
         let btn = $("#add-bank-data button[type='submit']");
@@ -24,9 +66,9 @@ $(function () {
         const form = event.target;
         const url = form.action;
         const inputs = {
-            account_name: $("input[name='account_name']").val(),
+            //account_name: $("input[name='account_name']").val(),
             account_number: $("input[name='account_number']").val(),
-            bank_name: $("input[name='bank_name']").val()
+            bank_name: $("select[name='bank_name']").val()
         };
         let token = $("input[name='_token']").val()
 
@@ -42,20 +84,22 @@ $(function () {
         axios.post(url, inputs, config)
         .then(function(response){
             let message = response.data.message;
+            let account = response.data.results;
+            $("input[name='account_name']").val(account.account_name);
             //$(".spin-loader-box").addClass("d-none");
             Swal.fire(response.data.message);
             btn.attr("disabled", false);
         })
         .catch(function(error){
             let errors = error.response.data.error;
-            if(errors.account_name){
-                document.getElementsByClassName('error')[0].innerHTML = errors.account_name;
-            }
             if(errors.account_number){
                 document.getElementsByClassName('error')[1].innerHTML = errors.account_number;
             }
             if(errors.bank_name){
-                document.getElementsByClassName('error')[2].innerHTML = errors.bank_name;
+                document.getElementsByClassName('error')[0].innerHTML = errors.bank_name;
+            }
+            if(errors.account_name){
+                document.getElementsByClassName('error')[2].innerHTML = errors.account_name;
             }
             //$(".spin-loader-box").addClass("d-none");
             btn.attr("disabled", false);

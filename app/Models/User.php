@@ -15,8 +15,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    //protected $guard = [""];
-
     protected $fillable = [
         'phone',
         'email',
@@ -28,7 +26,8 @@ class User extends Authenticatable
         'referral',
         'total_withdrawal',
         'total_income',
-        "referral_income"
+        "referral_income",
+        "usertype"
     ];
 
     protected $hidden = [
@@ -67,14 +66,6 @@ class User extends Authenticatable
         );
     }
 
-    /*protected function password(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value,
-            set: fn ($value) => Hash::make($value),
-        );
-    }*/
-
     public function bank()
     {
         return $this->hasOne(BankDetail::class, 'user_id');
@@ -87,7 +78,7 @@ class User extends Authenticatable
 
     public function referer()
     {
-        return $this->belongsTo(ReferralUser::class, 'referee_id');
+        return $this->hasOne(ReferralUser::class, 'referee_id');
     }
 
 }

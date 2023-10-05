@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,12 @@ class Withdrawal extends Model
     protected $fillable = [
         'user_id',
         'amount',
-        'status'
+        'status',
+        "reference",
+        "verified",
+        'account_name',
+        'account_number',
+        'bank_name',
     ];
 
     protected $hidden = [
@@ -25,18 +31,26 @@ class Withdrawal extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->toFormattedDateString(),
+            get: fn ($value) => Carbon::parse($value)->format("Y-m-d H:i:s"),
             set: fn ($value) => $value
         );
     }
 
-    /*protected function amount(): Attribute
+    protected function accountNumber(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => number_format($value, 2),
-            set: fn ($value) => $value
+            get: fn ($value) => Crypt::decryptString($value),
+            set: fn ($value) => Crypt::encryptString($value),
         );
-    }*/
+    }
+
+    protected function accountName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Crypt::decryptString($value),
+            set: fn ($value) => Crypt::encryptString($value),
+        );
+    }
 
     public function user()
     {

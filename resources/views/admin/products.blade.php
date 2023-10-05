@@ -36,12 +36,12 @@
       </div>
    </div>
 </div>
-<script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
-<script src="{{asset('assets/libs/axios/axios.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('admin/assets/libs/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{asset('admin/assets/libs/axios/axios.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('admin/assets/plugins/datatables/js/responsive.bootstrap4.min.js')}}"></script>
 <script>
 	$('.users-table').DataTable({
         ajax: {

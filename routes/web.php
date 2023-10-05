@@ -37,18 +37,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/order', [UserController::class, 'order']);
     Route::get('/order/{id}', [UserController::class, 'getOrder']);
     Route::get('/order/task/{id}', [UserController::class, 'runDailyTask']);
+    Route::post('/bank-details/verify', [UserController::class, 'verifyBankDetails']);
     Route::post('/bank-details', [UserController::class, 'addBankDetails']);
     Route::get('/products', [UserController::class, 'products']);
     Route::get('/product/{id}', [UserController::class, 'productData']);
     Route::post('/withdrawal/pin', [UserController::class, 'saveWithdrawalPin']);
     Route::post('/withdraw', [UserController::class, 'withdraw']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
-});
 
-Route::group(['middleware' => []], function () {
-    Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name("login");
-    Route::get('/dashboard', [AdminController::class, 'index']);
-    Route::get('/dashboard/products', [AdminController::class, 'showProducts']);
-    Route::get('/dashboard/orders', [AdminController::class, 'showOrders']);
-    Route::get('/dashboard/withdrawals', [AdminController::class, 'showWithdrawals']);
+    Route::group(['middleware' => ['yorlad']], function () {
+        Route::get('/dashboard/logout', [AdminController::class, 'logout']);
+        Route::get('/dashboard/', [AdminController::class, 'index']);
+        Route::get('/dashboard/products', [AdminController::class, 'showProducts']);
+        Route::get('/dashboard/orders', [AdminController::class, 'showOrders']);
+        Route::get('/dashboard/withdrawals', [AdminController::class, 'showWithdrawals']);
+        Route::get('/dashboard/order/confirm/{id}', [AdminController::class, 'confirmOrder']);
+        Route::get('/dashboard/withdrawal/confirm/{id}', [AdminController::class, 'confirmWithdrawal']);
+    });
 });
+Route::get('/payment-callback', [UserController::class, 'verifyTransaction']);
