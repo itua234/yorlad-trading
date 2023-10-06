@@ -102,8 +102,8 @@
                     <div class="row">
                         <div class="col-md-9">
                             <div class="slider_content">
-                                <h2 class="slider_title">You are Using Free Lite Version of Cafe</h2>
-                                <p class="wow fadeInUp">Please, purchase full version to get all sections, features and commercial license for footer credit removal.</p>
+                                <h2 class="slider_title">A Digital platform for Agribusiness</h2>
+                                <p class="wow fadeInUp">A global digital platform that gives everyone the opportunity to engage in Agribusiness anytime and on the go, by funding farms and trading of agricultural commodities.</p>
                                 <a href="{{url('/products')}}" rel="nofollow" class="main-btn">Our Products</a>
                             </div> <!-- slider content -->
                         </div>
@@ -239,20 +239,20 @@
             <div class="row">
                 <div class="col-md-4 col-sm-12">
                     <div class="single_counter mt-30 wow fadeIn" data-wow-duration="1.3s" data-wow-delay="0.2s">
-                        <span class="count"><span class="counter">10+</span></span>
-                        <p>Partners</p>
+                        <span style="font-size:18px;">Healthy Returns</span>
+                        <p style="font-size:14px;">The most profitable farming and commodity trading experience you can think of. Yes, we Know!</p>
                     </div> <!-- single counter -->
                 </div>
                 <div class="col-md-4 col-sm-12">
                     <div class="single_counter mt-30 wow fadeIn" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                        <span class="count"><span class="counter">10+</span></span>
-                        <p>Type of Products</p>
+                        <span style="font-size:18px;">Short Cycles</span>
+                        <p style="font-size:14px;">Fast turnaround times ranging from 3 up to about 6 weeks depending on farm or commodity trade type</p>
                     </div> <!-- single counter -->
                 </div>
                 <div class="col-md-4 col-sm-12">
                     <div class="single_counter mt-30 wow fadeIn" data-wow-duration="1.3s" data-wow-delay="0.8s">
-                        <span class="count"><span class="counter">05</span></span>
-                        <p>Team Members</p>
+                        <span style="font-size:18px;">Low Capital</span>
+                        <p style="font-size:14px;">Low minimum investment required per unit, you can start a farm or execute a trade with as low as N5,000</p>
                     </div> <!-- single counter -->
                 </div>
             </div> <!-- row -->
@@ -362,10 +362,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div>
-                                <h2>You are Using Free Lite Version of Cafe</h2>
-                                <p class="wow fadeInUp">Please, purchase full version to get all sections, features and commercial license for footer credit removal.</p>
+                                <h2>You Invest!, We Farm Process& Sell!, You Profit!</h2>
+                                <p class="wow fadeInUp">Vado Agrotrading investment is a simple and secure collaborative platform that enables you engage in profitable agribusiness opportunities from the comfort of your home. You can invest in Farms, trade in commodities and count your profits in no time.</p>
                                 </br>
-                                <a href="https://rebrand.ly/cafe-ud" rel="nofollow" class="main-btn">Purchase Now</a>
+                                <a href="{{url('/register')}}" rel="nofollow" class="main-btn">Purchase Now</a>
                             </div> <!-- slider content -->
                         </div>
                     </div> <!-- row -->
@@ -468,7 +468,7 @@
                     <div class="col-lg-4 col-md-4 order-md-1 order-lg-1">
                         <div class="footer_about mt-45">
                             <h4 class="footer_title">About Us</h4>
-                            <p>Vado Global is one of the leading digital investment platforms with branches in West Africa and some notable South American Countries, you can invest in our products and count your profits in no time</p>
+                            <p>Vado Trading is one of the leading digital Agro-investment platforms, our mission is to foster collaborative development in the agricultural sector</p>
                             <ul class="social">
                                 <li><a href="#"><i class="lni lni-facebook-filled"></i></a></li>
                                 <li><a href="#"><i class="lni lni-twitter-original"></i></a></li>
